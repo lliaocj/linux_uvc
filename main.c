@@ -105,7 +105,21 @@ int MinrryUvc_PTZContrl(unsigned int handle)
 	return MinrryUvc_SetPara(handle, XU_CONTROL_PTZ_CONTROL,value,2);
 }
 
-//云台控制
+//云台控制2 这个是uvc标准的云台控制命令
+int MinrryUvc_PTZContrlExt(unsigned int handle)
+{
+	int ret = 0;
+	int pos[2] = {0};
+	printf("input ptz pos Pan(-180 +180) and Tilt(-180  +180)\n");
+	scanf("%d%d", &pos[0],&pos[1]);
+
+	ret = MinrryUvc_SetParaExt(handle,V4L2_CID_PAN_ABSOLUTE, &pos[0],1);//水平移动
+
+	ret = MinrryUvc_SetParaExt(handle,V4L2_CID_TILT_ABSOLUTE, &pos[1],1);//上下移动
+	return ret;
+}
+
+//获取相机版本
 int MinrryUvc_GetVersionsInfo(unsigned int handle)
 {
 
@@ -238,8 +252,9 @@ int main(int argc, char *argv[])
 
 			case 'z':
 				{
-					//open SubStream
-					MinrryUvc_PTZContrl(handle);	
+					//pzt contrl
+					//MinrryUvc_PTZContrl(handle);	
+					MinrryUvc_PTZContrlExt(handle);	
 				}break;
 
 			case 'g':

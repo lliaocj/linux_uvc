@@ -41,6 +41,8 @@ extern void MinrryUvc_SetListen(unsigned int Handle, UvcPostData pFunction);
 extern int MinrryUvc_SetPara(unsigned int Handle,unsigned char selector,unsigned char *value,int size);
 //明日UVC扩展GET命令，目前该函数只支持获取版本信息 select为0x09
 extern int MinrryUvc_GetPara(unsigned int Handle,uint8_t selector,uint8_t *value,int size);
+//uvc控制云台标准命令
+extern int MinrryUvc_SetParaExt(unsigned int Handle,int selector,int *value,int size);
 
 //开启预览
 extern int MinrryUvc_StartPreview(unsigned int Handle);

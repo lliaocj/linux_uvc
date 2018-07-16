@@ -166,6 +166,20 @@ int MinrryUvc_SetPara(unsigned int Handle,unsigned char selector,unsigned char *
 	return UvcDevice_SetPara(sUvcAttr->mFd, UVC_EXTENSION_UNIT_ID, selector, value, size);
 }
 
+int MinrryUvc_SetParaExt(unsigned int Handle,int selector,int *value, int size)
+{
+	if(Handle > UVC_MAX_DEVICE)
+	{
+		LOG_ERROR("this hande dev not open");
+		return -1;
+	}
+
+	S_MINRRY_UVC_ATTR *sUvcAttr = sUvcAttrs[Handle];
+
+
+	return UvcDevice_SetParaExt(sUvcAttr->mFd, selector, value, size);
+}
+
 int MinrryUvc_GetPara(unsigned int Handle,unsigned char selector,unsigned char *value, int size)
 {
 	if(Handle > UVC_MAX_DEVICE)

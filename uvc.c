@@ -319,6 +319,24 @@ int UvcDevice_SetPara(int fd, uint8_t unit,uint8_t selector,uint8_t *value,int s
 	return 0;
 }
 
+int UvcDevice_SetParaExt(int fd, int selector,int *mvalue_Absolute,int size)
+{
+	struct v4l2_ext_control control;
+	struct v4l2_ext_controls controls;
+	int ret;
+	control.id = selector;
+	control.value = mvalue_Absolute[0]*3600;
+	controls.ctrl_class = V4L2_CTRL_CLASS_USER;
+	controls.count = size;
+	controls.controls = &control;
+	ret = ioctl(fd, VIDIOC_S_EXT_CTRLS, &controls);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+
+}
+
 int UvcDevice_GetPara(int fd, uint8_t unit,uint8_t selector,uint8_t *value,int size)
 {
 	int	len = 0;

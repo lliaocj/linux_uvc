@@ -4,6 +4,8 @@
 #include <stdio.h>
 //#include <linux/videodev2.h>
 #include <linux/videodev2.h>
+#include <linux/usb/video.h>
+#include <linux/uvcvideo.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +18,7 @@
 
 #define UVC_SET_CUR                 0x01
 #define UVC_GET_CUR                 0x81
+#define UVC_TERMINAL_CONTROL	    2
 
 //以下定义的宏如果内核中已经有该结构体的定义请关闭
 #ifdef LINUX
@@ -143,6 +146,7 @@ extern int UvcDevice_StreamOff(int fd);
 extern int UvcDevice_CleanFrame(int fd, mMapBuffers *pBuff);
 
 extern int UvcDevice_SetPara(int fd, uint8_t unit,uint8_t selector,uint8_t *value,int size);
+extern int UvcDevice_SetParaExt(int fd, int selector,int *value,int size);
 extern int UvcDevice_GetPara(int fd, uint8_t unit,uint8_t selector,uint8_t *value,int size);
 
 extern int UvcDevice_SetIdr(int fd, int index);
