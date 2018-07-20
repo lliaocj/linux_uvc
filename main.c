@@ -5,6 +5,8 @@ static int Index = 0;
 static char unsigned value[128] = {0};
 FILE *fp = NULL;
 static int IsIFrame = 0;
+static int frame = 30;
+static int show = 0;
 
 //说明：
 //以下接口是针对UVC设备端的控制命令，只针对了一路码流，可以设置Index的值控制多路码流
@@ -16,6 +18,9 @@ int MinrryUvc_SetProfile(unsigned int handle)
 	value[0] = Index;//Stream number
 	value[1] = 1;//H.264 profile,0: Baseline,1: Main profile,2: High profile
 	value[2] = 0;
+
+	printf("input profile 0:BP 1:MP 2:HP\n");
+	scanf("%d",&value[1]);
 
 	return MinrryUvc_SetPara(handle, XU_CONTROL_ENCODE_PROFILE, value, 3);
 }
@@ -59,7 +64,6 @@ int MinrryUvc_SetBitsRate(unsigned int handle)
 //设置帧率
 int MinrryUvc_SetFrameRate(unsigned int handle)
 {
-	int frame = 0;
 
 	printf("input frame rate (1 - 30 / fps)\n");
 	scanf("%d",&frame);
@@ -139,11 +143,24 @@ int MinrryUvc_GetVersionsInfo(unsigned int handle)
 
 int UvcRecvData(unsigned char *pBuff, int s32Size)
 {
+	static int frame_num = 0;
+	static long length = 0;
 	if(pBuff[4]	== 0x67 || IsIFrame)//设置第一帧为I帧，不然保存的流vlc无法播放
 	{
 		if(fp)
 			fwrite(pBuff, 1, s32Size, fp);
 		IsIFrame = 1;	
+
+		frame_num++;
+		length += (s32Size * 8 / 1024);
+		if(frame_num == frame)
+		{
+			if(show)
+			printf("this bits = %d kb/s\n",length);
+			length = 0;	
+			frame_num = 0;
+		}
+
 	}
 
 	return 0;
@@ -162,6 +179,7 @@ void Menu()
 	printf("|---c-----set buffsize	 |\n");
 	printf("|---z-----pzt contrl   	 |\n");
 	printf("|---g-----get version    |\n");
+	printf("|---d-----dicplay bits   |\n");
 	printf("|---q-----exit        	 |\n");
 	printf("--------------------------\n");
 }
@@ -261,6 +279,10 @@ int main(int argc, char *argv[])
 				{
 					//open SubStream
 					MinrryUvc_GetVersionsInfo(handle);	
+				}break;
+			case 'd':
+				{
+					show = !show;
 				}break;
 
 			case 'q':

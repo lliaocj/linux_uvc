@@ -2,10 +2,9 @@
 #define __UVC__H__
 
 #include <stdio.h>
-//#include <linux/videodev2.h>
 #include <linux/videodev2.h>
-#include <linux/usb/video.h>
-#include <linux/uvcvideo.h>
+//#include <linux/usb/video.h>
+//#include <linux/uvcvideo.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
