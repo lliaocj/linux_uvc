@@ -7,6 +7,7 @@ FILE *fp = NULL;
 static int IsIFrame = 0;
 static int frame = 30;
 static int show = 0;
+static int format = 0;
 
 //说明：
 //以下接口是针对UVC设备端的控制命令，只针对了一路码流，可以设置Index的值控制多路码流
@@ -140,15 +141,30 @@ int MinrryUvc_GetVersionsInfo(unsigned int handle)
 	return 0;
 }
 
+//set format
+int MinrryUvc_SetFormat(unsigned int handle)
+{
+	int ret = 0;
+    printf("plese input format 1:MJPEG 5:H264 7:H265");
+    scnaf("%d",&format);
+    value[0] = Index;
+    value[1] = format;
+	
+	return MinrryUvc_SetPara(handle, XU_CONTROL_ENCODE_CODEC,value,2);
+}
+
 
 int UvcRecvData(unsigned char *pBuff, int s32Size)
 {
 	static int frame_num = 0;
 	static long length = 0;
-	if(pBuff[4]	== 0x67 || IsIFrame)//设置第一帧为I帧，不然保存的流vlc无法播放
+//	if(pBuff[4]	== 0x67 || IsIFrame || format == 1)//设置第一帧为I帧，不然保存的流vlc无法播放
 	{
 		if(fp)
+        {
+
 			fwrite(pBuff, 1, s32Size, fp);
+        }
 		IsIFrame = 1;	
 
 		frame_num++;

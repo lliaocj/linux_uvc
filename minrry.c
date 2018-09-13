@@ -87,7 +87,7 @@ int MinrryUvc_Init(unsigned int *pHandle, int mID)
 
 	sUvcAttr->u32Width = 1920;
 	sUvcAttr->u32Heigth = 1280;
-	sUvcAttr->u32Pix = V4L2_PIX_FMT_H264;
+	sUvcAttr->u32Pix = V4L2_PIX_FMT_MJPEG;
 	sUvcAttr->mFd = fd;
 
 	sUvcAttrs[index] = sUvcAttr;
